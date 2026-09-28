@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "7a35c24e-b011-42e1-a982-f56e9198fa01",
+		"name": "MentorConnect API - Alumni-Student Mentorship Matching",
+		"description": "Comprehensive Postman Collection for testing the MentorConnect Spring Boot backend, featuring smart tag-overlap matching, capacity limit enforcement, session tracking, and engagement reports.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "1. Interest Tags",
+			"item": [
+				{
+					"name": "GET All Tags",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/tags",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "tags"]
+						}
+					}
+				},
+				{
+					"name": "POST Create Tag",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Kubernetes\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/tags",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "tags"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Alumni Mentors",
+			"item": [
+				{
+					"name": "POST Register Alumni Mentor",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Priya Sharma\",\n  \"email\": \"priya.sharma@microsoft.com\",\n  \"company\": \"Microsoft\",\n  \"jobTitle\": \"Principal Software Architect\",\n  \"maxMentees\": 2,\n  \"bio\": \"Passionate about distributed systems, Azure cloud, and helping students transition to big tech.\",\n  \"avatarUrl\": \"https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150\",\n  \"expertiseTagNames\": [\"Java\", \"Spring Boot\", \"Cloud Architecture\", \"System Design\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/alumni",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "alumni"]
+						}
+					}
+				},
+				{
+					"name": "GET List All Alumni Mentors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/alumni",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "alumni"]
+						}
+					}
+				},
+				{
+					"name": "GET Alumni By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/alumni/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "alumni", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Students",
+			"item": [
+				{
+					"name": "POST Register Student",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Lucas Moura\",\n  \"email\": \"lucas.moura@university.edu\",\n  \"department\": \"Computer Science & Engineering\",\n  \"graduationYear\": 2025,\n  \"avatarUrl\": \"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150\",\n  \"targetTagNames\": [\"Java\", \"Spring Boot\", \"Microservices\", \"System Design\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/students",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "students"]
+						}
+					}
+				},
+				{
+					"name": "GET List All Students",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/students",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "students"]
+						}
+					}
+				},
+				{
+					"name": "GET Student By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/students/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "students", "1"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Smart Matching Engine",
+			"item": [
+				{
+					"name": "GET Auto-Suggest Mentors for Student (Ranked by Overlap)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/matches/suggestions?studentId=1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "matches", "suggestions"],
+							"query": [{"key": "studentId", "value": "1"}]
+						},
+						"description": "Auto-suggests mentors ranked strictly by the count of overlapping interest tags (highest first), as required by business rules."
+					}
+				},
+				{
+					"name": "POST Custom Search by Tags",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "[\"Java\", \"Spring Boot\", \"Microservices\"]"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/matches/custom-search",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "matches", "custom-search"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Mentorship Pairings",
+			"item": [
+				{
+					"name": "POST Create Mentorship Pair (Success)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"alumniId\": 2,\n  \"studentId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/mentorship-pairs",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "mentorship-pairs"]
+						}
+					}
+				},
+				{
+					"name": "POST Create Pair - Capacity Limit Test (Negative Test)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"alumniId\": 2,\n  \"studentId\": 3\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/mentorship-pairs",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "mentorship-pairs"]
+						},
+						"description": "Tests rejection when mentor exceeds their declared maximum concurrent mentee limit."
+					}
+				},
+				{
+					"name": "GET List All Mentorship Pairs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mentorship-pairs",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "mentorship-pairs"]
+						}
+					}
+				},
+				{
+					"name": "PATCH Update Pair Status to COMPLETED",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/mentorship-pairs/1/status?status=COMPLETED",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "mentorship-pairs", "1", "status"],
+							"query": [{"key": "status", "value": "COMPLETED"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Mentoring Sessions",
+			"item": [
+				{
+					"name": "POST Schedule Mentoring Session",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pairId\": 1,\n  \"topic\": \"System Architecture & Low-Level Design Discussion\",\n  \"scheduledTime\": \"2026-10-05T16:00:00\",\n  \"durationMinutes\": 60,\n  \"meetingLink\": \"https://meet.google.com/mentor-connect-session\",\n  \"notes\": \"Reviewing caching strategies with Redis and Spring Cache.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions"]
+						}
+					}
+				},
+				{
+					"name": "GET List All Sessions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions"]
+						}
+					}
+				},
+				{
+					"name": "PATCH Update Session Status to COMPLETED",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/sessions/2/status?status=COMPLETED",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "sessions", "2", "status"],
+							"query": [{"key": "status", "value": "COMPLETED"}]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Mentorship Reports",
+			"item": [
+				{
+					"name": "GET Mentorship Engagement Report (Sessions per Pair)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/reports/engagement",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reports", "engagement"]
+						},
+						"description": "Calculates sessions held per mentor pair, completion status, and total mentoring hours."
+					}
+				},
+				{
+					"name": "GET Platform Summary Metrics",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/reports/summary",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "reports", "summary"]
+						}
+					}
+				}
+			]
+		}
+	]
+}
